@@ -1,20 +1,20 @@
 import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
-import static java.awt.Component.TOP_ALIGNMENT;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class SwingDemo {
 
-    private static String [] numbers = {
+    private static final String[] numbers = {
             "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"
     };
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame f = new JFrame("SwingDemo");
-            f.setDefaultCloseOperation(EXIT_ON_CLOSE);
-            JComponent sliderPanel =  new JPanel(new FlowLayout(FlowLayout.LEADING));
+            JFrame main = new JFrame("SwingDemo");
+            main.setDefaultCloseOperation(EXIT_ON_CLOSE);
+            JComponent sliderPanel = new JPanel(new FlowLayout(FlowLayout.LEADING));
             SliderWithLabel slider = new SliderWithLabel();
             sliderPanel.add(slider);
             JLabel label = new JLabel();
@@ -26,10 +26,10 @@ public class SwingDemo {
             JPanel contentPanel = new JPanel(new BorderLayout());
             contentPanel.add(sliderPanel, BorderLayout.CENTER);
             contentPanel.add(label, BorderLayout.SOUTH);
-            f.setContentPane(contentPanel);
-            f.pack();
-            f.setLocationRelativeTo(null);
-            f.setVisible(true);
+            main.setContentPane(contentPanel);
+            main.pack();
+            main.setLocationRelativeTo(null);
+            main.setVisible(true);
         });
     }
 }
