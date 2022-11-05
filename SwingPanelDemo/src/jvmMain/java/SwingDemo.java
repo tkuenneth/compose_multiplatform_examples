@@ -20,8 +20,9 @@ public class SwingDemo {
             JLabel label = new JLabel();
             label.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
             slider.addPropertyChangeListener(SliderWithLabel.CUSTOM_PROPERTY, (event) -> {
-                label.setText(numbers[(int) event.getNewValue() - 1]);
+                updateLabel(label, (int) event.getNewValue());
             });
+            updateLabel(label, slider.getCustomProperty());
             JPanel contentPanel = new JPanel(new BorderLayout());
             contentPanel.add(sliderPanel, BorderLayout.CENTER);
             contentPanel.add(label, BorderLayout.SOUTH);
@@ -30,5 +31,9 @@ public class SwingDemo {
             main.setLocationRelativeTo(null);
             main.setVisible(true);
         });
+    }
+
+    private static void updateLabel(JLabel label, int value) {
+        label.setText(numbers[value - 1]);
     }
 }

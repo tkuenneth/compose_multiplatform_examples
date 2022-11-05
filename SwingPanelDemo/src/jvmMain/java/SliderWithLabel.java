@@ -3,6 +3,9 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import java.awt.FlowLayout;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class SliderWithLabel extends JPanel {
 
     public static final String CUSTOM_PROPERTY = "customProperty";
@@ -34,7 +37,7 @@ public class SliderWithLabel extends JPanel {
 
     public void setCustomProperty(Integer newValue) {
         Integer oldValue = getCustomProperty();
-        customProperty = newValue;
+        customProperty = min(max(1, newValue), 10);
         firePropertyChange(CUSTOM_PROPERTY, oldValue, newValue);
     }
 }
