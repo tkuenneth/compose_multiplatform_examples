@@ -6,7 +6,7 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class SwingDemo {
 
-    private static final String[] numbers = {
+    public static final String[] numbers = {
             "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"
     };
 
@@ -19,10 +19,9 @@ public class SwingDemo {
             sliderPanel.add(slider);
             JLabel label = new JLabel();
             label.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-            slider.addPropertyChangeListener(SliderWithLabel.VALUE, (event) -> {
+            slider.addPropertyChangeListener(SliderWithLabel.CUSTOM_PROPERTY, (event) -> {
                 label.setText(numbers[(int) event.getNewValue() - 1]);
             });
-            slider.setValue(5);
             JPanel contentPanel = new JPanel(new BorderLayout());
             contentPanel.add(sliderPanel, BorderLayout.CENTER);
             contentPanel.add(label, BorderLayout.SOUTH);

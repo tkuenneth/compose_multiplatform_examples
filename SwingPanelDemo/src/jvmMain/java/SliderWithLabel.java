@@ -1,14 +1,12 @@
-import javax.swing.*;
-import java.awt.*;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import java.awt.FlowLayout;
 
 public class SliderWithLabel extends JPanel {
 
-    PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-
-    public static final String VALUE = "value";
-    private Integer value = null;
+    public static final String CUSTOM_PROPERTY = "customProperty";
+    private Integer customProperty = null;
 
     public SliderWithLabel() {
         super(new FlowLayout(FlowLayout.LEADING, 8, 8));
@@ -16,31 +14,27 @@ public class SliderWithLabel extends JPanel {
         JSlider slider = new JSlider();
         JLabel label = new JLabel();
         slider.addChangeListener((event) -> {
-            Integer newValue = slider.getModel().getValue();
-            label.setText(String.format("%d", newValue));
-            setValue(newValue);
+            setCustomProperty(slider.getModel().getValue());
         });
         slider.setMinimum(1);
         slider.setMaximum(10);
-        addPropertyChangeListener(VALUE, (event) -> {
-            slider.setValue((int) event.getNewValue());
+        addPropertyChangeListener(CUSTOM_PROPERTY, (event) -> {
+            int newValue = (int) event.getNewValue();
+            slider.setValue(newValue);
+            label.setText(String.format("%d", newValue));
         });
-        slider.setValue(4);
+        setCustomProperty((slider.getMaximum() - slider.getMinimum()) / 2 + slider.getMinimum());
         add(slider);
         add(label);
     }
 
-    public Integer getValue() {
-        return value;
+    public Integer getCustomProperty() {
+        return customProperty;
     }
 
-    public void setValue(Integer newValue) {
-        Integer oldValue = getValue();
-        value = newValue;
-        pcs.firePropertyChange(VALUE, oldValue, newValue);
-    }
-
-    public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        pcs.addPropertyChangeListener(propertyName, listener);
+    public void setCustomProperty(Integer newValue) {
+        Integer oldValue = getCustomProperty();
+        customProperty = newValue;
+        firePropertyChange(CUSTOM_PROPERTY, oldValue, newValue);
     }
 }
