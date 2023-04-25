@@ -1,3 +1,4 @@
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -13,12 +14,11 @@ public class SliderWithLabel extends JPanel {
 
     public SliderWithLabel() {
         super(new FlowLayout(FlowLayout.LEADING, 8, 8));
+        setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         setAlignmentY(TOP_ALIGNMENT);
         JSlider slider = new JSlider();
         JLabel label = new JLabel();
-        slider.addChangeListener((event) -> {
-            setCustomProperty(slider.getModel().getValue());
-        });
+        slider.addChangeListener((event) -> setCustomProperty(slider.getModel().getValue()));
         slider.setMinimum(1);
         slider.setMaximum(10);
         addPropertyChangeListener(CUSTOM_PROPERTY, (event) -> {

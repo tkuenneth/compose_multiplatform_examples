@@ -1,6 +1,4 @@
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("multiplatform")
@@ -14,6 +12,17 @@ repositories {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+}
+
+tasks {
+    register<Exec>("runSwingDemo") {
+        commandLine(
+            "java",
+            "-classpath",
+            "./build/libs/SwingPanelDemo-jvm-1.0-SNAPSHOT.jar",
+            "SwingDemo"
+        )
+    }
 }
 
 kotlin {
@@ -37,7 +46,11 @@ compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(
+                TargetFormat.Dmg,
+                TargetFormat.Msi,
+                TargetFormat.Deb
+            )
             packageName = "SwingPanelDemo"
             packageVersion = "1.0.0"
         }

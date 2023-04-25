@@ -68,5 +68,4 @@ fun main() = application(exitProcessOnExit = false) {
     ) {
         SwingPanelDemoApp()
     }
-    SwingDemo.main(emptyArray())
 }
