@@ -16,6 +16,7 @@ repositories {
 
 tasks {
     register<Exec>("runSwingDemo") {
+        dependsOn("build")
         commandLine(
             "java",
             "-classpath",
