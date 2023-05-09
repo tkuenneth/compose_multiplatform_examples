@@ -8,45 +8,48 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.awt.ComposePanel
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.awt.BorderLayout
 import java.awt.Dimension
 import javax.swing.JPanel
-import kotlin.math.max
-import kotlin.math.min
+import javax.swing.SwingUtilities
 
 const val CURRENT_VALUE_PROPERTY = "myCustomProperty"
 
 class SliderWithValueWrapper(val initialValue: Int) : JPanel(BorderLayout()) {
 
-    private val currentValueFlow = MutableStateFlow(initialValue.toFloat())
-
-    fun getCurrentValue(): Int = currentValueFlow.value.toInt()
-
-    fun setCurrentValue(value: Int) {
-        setCurrentValue(max(1, min(value, 10)), true)
-    }
-
-    private fun setCurrentValue(value: Int, updateFlow: Boolean) {
-        firePropertyChange(CURRENT_VALUE_PROPERTY, getCurrentValue(), value)
-        if (updateFlow) {
-            currentValueFlow.value = value.toFloat()
+    var currentValue: Int = initialValue
+        set(value) {
+            firePropertyChange(CURRENT_VALUE_PROPERTY, field, value)
+            field = value
         }
-    }
+
+    private val currentValueFloat = MutableStateFlow(currentValue.toFloat())
 
     init {
         val composePanel = ComposePanel()
         composePanel.setContent {
-            val currentValueState by currentValueFlow.collectAsState()
-            SliderWithValue(currentValueState, ({ newFloat ->
-                setCurrentValue(newFloat.toInt(), false)
-                currentValueFlow.value = newFloat
+            val state by currentValueFloat.collectAsState()
+            val a = rememberCoroutineScope()
+            SliderWithValue(state, ({ newFloat ->
+                currentValue = newFloat.toInt()
+                currentValueFloat.value = newFloat
             }))
+            addPropertyChangeListener(CURRENT_VALUE_PROPERTY) {
+                (it.newValue as Int).run {
+                    a.launch {
+                        currentValueFloat.value = toFloat()
+
+                    }
+                }
+            }
         }
         preferredSize = Dimension(300, 96)
         add(composePanel, BorderLayout.CENTER)
@@ -60,7 +63,8 @@ fun SliderWithValue(
 ) {
     MaterialTheme {
         Row(
-            verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(16.dp)
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(16.dp)
         ) {
             Slider(
                 modifier = Modifier.weight(1F),
