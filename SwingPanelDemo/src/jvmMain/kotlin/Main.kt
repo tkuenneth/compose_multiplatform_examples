@@ -60,7 +60,7 @@ fun SwingPanelDemoApp() {
     }
 }
 
-fun main() = application(exitProcessOnExit = false) {
+fun main() = application() {
     Window(
         onCloseRequest = ::exitApplication,
         title = "SwingPanelDemo",
